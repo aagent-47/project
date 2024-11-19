@@ -1,0 +1,202 @@
+import mysql.connector as mysqltor
+con=mysqltor.connect(host="localhost",user="root",password="1234",database="library")
+cur=con.cursor()
+
+def admin():
+    print("---------------------------------------------------")
+    print("---------WELCOME TO ADMIN PANEL----------")
+    print("---------------------------------------------------")
+    print("1.Add books")
+    print("2.Update Account details")
+    print("3.Delete Accounts")
+    print("4.Update Books")
+    print("5.Delete Books")
+    print("6.View Rented Books")
+    print("7.View Books Bought")
+    ch=int(input("Enter the option="))
+    if ch==1:
+        bookid=int(input("Enter Book-ID="))
+        bookna=input("Enter Book Name=")
+        bookau=input("Enter Book Author=")
+        bookpr=int(input("Enter Book Price="))
+        bookge=input("Enter Book Genre=")
+        cur.execute("insert into books values({},'{}','{}',{},'{}')".format(bookid,bookna,bookau,bookpr,bookge))
+        con.commit()
+        print("Added Book Succesfully!")
+        
+    if ch==2:
+        print("---------------------------------------------------")
+        print("----SELECT THE TABLE TO BE UPDATED-------")
+        print("---------------------------------------------------")
+        print("1.Update Name")
+        print("2.Update Password")
+        print("3.Update Email")
+        c1=int(input("Enter the option="))
+        if c1==1:
+            nn=input("Enter the Old Name=")
+            ne=input("Enter the New Name=")
+            cur.execute("update account set user_name='{}' where user_name='{}'".format(ne,nn))
+            con.commit()
+            print("Changed the name succesfully!")
+        if c1==2:
+            po=input("Enter the Old password=")
+            pn=input("Enter the New password=")
+            cur.execute("update account set user_password='{}' where user_password='{}'".format(pn,no))
+            con.commit()
+            print("Changed the password succesfully!")
+        if c1==3:
+            eo=input("Enter the Old Email=")
+            en=input("Enter the New Email=")
+            cur.execute("update account set user_email='{}' where user_email='{}'".format(en,eo))
+            con.commit()
+            print("Changed the Email succesfully!")
+            
+    elif ch==3:
+        while True:            
+            da=input("Enter the Account Name to be deleted=")
+            cur.execute("delete from account where User_name='{}'".format(da))
+            con.commit()
+            print("Deleted Succesfully!")
+            break
+        else:
+            print("Enter a valid name")
+    elif ch==4:
+        print("---------------------------------------------------")
+        print("----SELECT THE TABLE TO BE UPDATED-------")
+        print("---------------------------------------------------")
+        print("1.Update Book-ID")
+        print("2.Update Book Name")
+        print("3.Update Book Author")
+        print("4.Update Book Price")
+        print("5.Update Book Genre")
+        c2=int(input("Enter the Valid option"))
+        if c2==1:
+            obi=int(input("Enter the old Book-ID"))
+            nbi=int(input("Enter the new Book-ID"))
+            cur.execute("update books set book_id={} where book_id={}".format(nbi,obi))
+            con.commit()
+            print("Updated Succesfully!")
+        if c2==2:
+            ona=input("Enter the old Book Name")
+            nna=input("Enter the new Book Name")
+            cur.execute("update books set book_name='{}' where book_name='{}'".format(ona,nna))
+            con.commit()
+            print("Updated Succesfully!")
+        if c2==3:
+            oid3=int(input("Enter the Book-ID"))
+            nau=input("Enter the new Book Author")
+            cur.execute("update books set book_id={} where book_author='{}'".format(oid3,nau))
+            con.commit()
+            print("Updated Succesfully!")
+        if c2==4:
+            oid4=int(input("Enter the Book-ID"))
+            npr=int(input("Enter the new price"))
+            cur.execute("update books set book_id={} where book_price={}".format(oid4,npr))
+            con.commit()
+            print("Updated Succesfully!")
+        if c2==4:
+            oid3=int(input("Enter the Book-ID"))
+            nge=input("Enter the new Book Genre")
+            cur.execute("update books set book_id={} where book_genre='{}'".format(oid3,nge))
+            con.commit()
+            print("Updated Succesfully!")
+            
+            
+            
+            
+            
+            
+            
+        
+        
+    
+                    
+    
+
+
+def search():
+    print("---------------------------------------------------")
+    print("----------SELECT A VALID OPTION-------------")
+    print("---------------------------------------------------")
+    print("1.Search by Book-id")
+    print("2.Search by Book name")
+    print("3.Search by Book price")
+    print("4.Search by Author name")
+    print("5.Search by Genre")
+    print("6.Display all the available books")
+    ch=int(input("Enter the option="))
+    if ch==1:
+        boid=int(input("Enter book id"))
+        cur.execute("select * from books where Book_id='{}' ".format(boid))
+    elif ch==2:
+        bona=int(input("Enter Book name"))
+        cur.execute("select * from books where Book_Name='{}' ".format(bona))
+    elif ch==3:
+        bopr=int(input("Enter Book price"))
+        cur.execute("select * from books where Book_id='{}' ".format(bopr))             #fix here using between
+    elif ch==4:
+        boid=int(input("Enter Genre"))
+        cur.execute("select * from books where Book_id='{}' ".format(boid))
+    elif ch==5:
+        cur.execute("select * from books")
+    else:
+        print("Not a valid option")
+    res=cur.fetchall()
+    for i in res:
+        print(i)
+    
+        
+    
+    
+
+def menu():
+    print("----------WELCOME TO THE LIBRARY----------")
+    print("---------------------------------------------------")
+    print("1.Search for books")
+    print("2.Buy books")
+    print("3.Rent books")
+    print("---------------------------------------------------")
+    ch=int(input("Enter a valid option="))
+    if ch==1:
+        search()
+
+def user():
+    print("----------Enter a valid option----------")
+    print("1.Create user")
+    print("2.Login")
+    ch=int(input('Enter the option'))
+    if ch==1:
+        userna=input('Enter the name=')
+        userpas=input("Enter the password=")
+        userema=input("Enter your email=")
+        cur.execute("insert into account values('{}','{}','{}')".format(userna,userpas,userema))
+        con.commit()
+        print("Account created succesfully!")
+    elif ch==2:
+        userlo=input("Enter the username=")
+        userpa=input("Enter the password=")
+        cur.execute("SELECT * FROM account WHERE User_name='{}' AND User_password='{}' ".format(userlo, userpa))
+        data=cur.fetchone()
+        if data:
+            print("Login Succesful. Welcome!")
+            menu()
+        else:
+            print("Invalid Username/Password. Please try again.")        
+        
+def client():
+    while True:
+        print("----------Enter your choice----------")
+        print("1.User")
+        print("2.Admin")
+        print("3.Exit")
+        ch=int(input("Enter your choice="))
+        if ch==1:
+            user()
+        elif ch==2:
+            admin()
+        elif ch==3:
+            print("Exiting the program...")
+            break
+        else:
+            print("Not found")
+client()
